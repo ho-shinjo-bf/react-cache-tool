@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "dev": "pnpm start:dev",
     "start": "nest start -b swc --type-check",
     "start:dev": "nest start --watch -b swc --type-check",
     "start:debug": "nest start --debug --watch -b swc --type-check",

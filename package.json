@@ -5,6 +5,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:nest": "pnpm --filter ...backend start:dev"
+    "dev": "pnpm --parallel dev"
   }
 }
