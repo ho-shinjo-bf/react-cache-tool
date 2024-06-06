@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UUID } from 'crypto';
 import { GetUserDto } from './dto/get-user.dto';
+import { ApiParam } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -28,11 +29,13 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @ApiParam({ name: 'id', type: String })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: UUID): Promise<GetUserDto> {
     return this.usersService.findOne(id);
   }
 
+  @ApiParam({ name: 'id', type: String })
   @Patch(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: UUID,
@@ -41,6 +44,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @ApiParam({ name: 'id', type: String })
   @Delete(':id')
   async remove(@Param('id', ParseUUIDPipe) id: UUID): Promise<void> {
     void this.usersService.delete(id);

@@ -9,5 +9,5 @@ pnpm i
 ## run
 
 ```shell
-pnpm dev:nest
+pnpm dev
 ```
