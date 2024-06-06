@@ -5,15 +5,18 @@
  * The react-cache-tools backend API description
  * OpenAPI spec version: 1.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
+  QueryClient,
   QueryFunction,
   QueryKey,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import type { CreateUserDto, GetUserDto, UpdateUserDto } from "../model";
 import { customInstance } from "../custom-instance";
@@ -46,7 +49,12 @@ export const getAppControllerGetHelloQueryOptions = <
     Awaited<ReturnType<typeof appControllerGetHello>>
   > = ({ signal }) => appControllerGetHello(signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return {
+    queryKey,
+    queryFn,
+    staleTime: 30000,
+    ...queryOptions,
+  } as UseQueryOptions<
     Awaited<ReturnType<typeof appControllerGetHello>>,
     TError,
     TData
@@ -75,6 +83,89 @@ export const useAppControllerGetHello = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const prefetchAppControllerGetHello = async <
+  TData = Awaited<ReturnType<typeof appControllerGetHello>>,
+  TError = unknown,
+>(
+  queryClient: QueryClient,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerGetHello>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getAppControllerGetHelloQueryOptions(options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+export const getAppControllerGetHelloSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof appControllerGetHello>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof appControllerGetHello>>,
+      TError,
+      TData
+    >
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getAppControllerGetHelloQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof appControllerGetHello>>
+  > = ({ signal }) => appControllerGetHello(signal);
+
+  return {
+    queryKey,
+    queryFn,
+    staleTime: 30000,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof appControllerGetHello>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AppControllerGetHelloSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof appControllerGetHello>>
+>;
+export type AppControllerGetHelloSuspenseQueryError = unknown;
+
+export const useAppControllerGetHelloSuspense = <
+  TData = Awaited<ReturnType<typeof appControllerGetHello>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof appControllerGetHello>>,
+      TError,
+      TData
+    >
+  >;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAppControllerGetHelloSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -176,7 +267,12 @@ export const getUsersControllerFindAllQueryOptions = <
     Awaited<ReturnType<typeof usersControllerFindAll>>
   > = ({ signal }) => usersControllerFindAll(signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return {
+    queryKey,
+    queryFn,
+    staleTime: 30000,
+    ...queryOptions,
+  } as UseQueryOptions<
     Awaited<ReturnType<typeof usersControllerFindAll>>,
     TError,
     TData
@@ -205,6 +301,90 @@ export const useUsersControllerFindAll = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const prefetchUsersControllerFindAll = async <
+  TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
+  TError = unknown,
+>(
+  queryClient: QueryClient,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof usersControllerFindAll>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getUsersControllerFindAllQueryOptions(options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+export const getUsersControllerFindAllSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof usersControllerFindAll>>,
+      TError,
+      TData
+    >
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getUsersControllerFindAllQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof usersControllerFindAll>>
+  > = ({ signal }) => usersControllerFindAll(signal);
+
+  return {
+    queryKey,
+    queryFn,
+    staleTime: 30000,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof usersControllerFindAll>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type UsersControllerFindAllSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof usersControllerFindAll>>
+>;
+export type UsersControllerFindAllSuspenseQueryError = unknown;
+
+export const useUsersControllerFindAllSuspense = <
+  TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof usersControllerFindAll>>,
+      TError,
+      TData
+    >
+  >;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getUsersControllerFindAllSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -251,6 +431,7 @@ export const getUsersControllerFindOneQueryOptions = <
     queryKey,
     queryFn,
     enabled: !!id,
+    staleTime: 30000,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof usersControllerFindOne>>,
@@ -284,6 +465,101 @@ export const useUsersControllerFindOne = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const prefetchUsersControllerFindOne = async <
+  TData = Awaited<ReturnType<typeof usersControllerFindOne>>,
+  TError = unknown,
+>(
+  queryClient: QueryClient,
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof usersControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getUsersControllerFindOneQueryOptions(id, options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+export const getUsersControllerFindOneSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof usersControllerFindOne>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof usersControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getUsersControllerFindOneQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof usersControllerFindOne>>
+  > = ({ signal }) => usersControllerFindOne(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    staleTime: 30000,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof usersControllerFindOne>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type UsersControllerFindOneSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof usersControllerFindOne>>
+>;
+export type UsersControllerFindOneSuspenseQueryError = unknown;
+
+export const useUsersControllerFindOneSuspense = <
+  TData = Awaited<ReturnType<typeof usersControllerFindOne>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof usersControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getUsersControllerFindOneSuspenseQueryOptions(
+    id,
+    options,
+  );
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 

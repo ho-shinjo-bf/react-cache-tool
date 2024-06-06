@@ -9,6 +9,14 @@ export default defineConfig({
       client: "react-query",
       prettier: true,
       override: {
+        query: {
+          useQuery: true,
+          useSuspenseQuery: true,
+          usePrefetch: true,
+          options: {
+            staleTime: 1000 * 30,
+          },
+        },
         mutator: {
           path: "./api/custom-instance.ts",
           name: "customInstance",
