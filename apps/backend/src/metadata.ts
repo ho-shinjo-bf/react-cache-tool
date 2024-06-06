@@ -1,0 +1,7 @@
+/* eslint-disable */
+export default async () => {
+    const t = {
+        ["./users/dto/get-user.dto"]: await import("./users/dto/get-user.dto")
+    };
+    return { "@nestjs/swagger": { "models": [[import("./users/dto/create-user.dto"), { "CreateUserDto": { name: { required: true, type: () => String, maxLength: 100 }, email: { required: true, type: () => String, maxLength: 100 }, sex: { required: true, type: () => Object }, age: { required: true, type: () => Number, maximum: 150, minimum: 1 }, note: { required: false, type: () => String, maxLength: 255 } } }], [import("./users/dto/update-user.dto"), { "UpdateUserDto": {} }], [import("./users/dto/get-user.dto"), { "GetUserDto": { id: { required: true, type: () => String }, name: { required: true, type: () => String }, email: { required: true, type: () => String }, sex: { required: true, type: () => Object }, age: { required: true, type: () => Number }, note: { required: false, type: () => String } } }]], "controllers": [[import("./app.controller"), { "AppController": { "getHello": { type: String } } }], [import("./users/users.controller"), { "UsersController": { "create": { type: t["./users/dto/get-user.dto"].GetUserDto }, "findAll": { type: [t["./users/dto/get-user.dto"].GetUserDto] }, "findOne": { type: t["./users/dto/get-user.dto"].GetUserDto }, "update": { type: t["./users/dto/get-user.dto"].GetUserDto }, "remove": {} } }]] } };
+};
