@@ -7,16 +7,19 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Logger,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UUID } from 'crypto';
 import { GetUserDto } from './dto/get-user.dto';
-import { ApiParam } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
@@ -26,6 +29,7 @@ export class UsersController {
 
   @Get()
   async findAll(): Promise<GetUserDto[]> {
+    this.logger.log('Finding all users');
     return this.usersService.findAll();
   }
 
